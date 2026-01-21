@@ -1,8 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useSession, signOut } from "next-auth/react"
-import { useRouter } from "next/navigation"
 import {
   LayoutDashboard,
   Package,
@@ -32,27 +31,12 @@ interface AdminDashboardProps {
 }
 
 export default function AdminDashboard({ onNavigate }: AdminDashboardProps) {
-  const { data: session, status } = useSession()
-  const router = useRouter()
+  const { data: session } = useSession()
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
   const [activePage, setActivePage] = useState("Dashboard")
   const [dateRange, setDateRange] = useState("This Week")
   const [refreshing, setRefreshing] = useState(false)
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({})
-
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/")
-    }
-  }, [status, router])
-
-  if (status === "loading") {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <p className="text-gray-600">Loading dashboard...</p>
-      </div>
-    )
-  }
 
   const menuItems = [
     { icon: LayoutDashboard, label: "Dashboard", active: true },
